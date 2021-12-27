@@ -19,11 +19,8 @@ namespace PSD_CreationDate
 
             fname.Text = fileInfo.FileName;
             pv.Text = fileInfo.PhotoshopVersion;
-
-            var a = DateTime.Parse(fileInfo.CreationDate);
-            cd.Text = a.ToString("yyyy-MM-dd HH:mm:ss");
-            a = DateTime.Parse(fileInfo.ModifyDate);
-            md.Text = a.ToString("yyyy-MM-dd HH:mm:ss");
+            cd.Text = fileInfo.CreationDate;
+            md.Text = fileInfo.ModifyDate;
         }
     }
 }

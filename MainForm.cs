@@ -32,11 +32,11 @@ namespace PSD_CreationDate
             var Directory = ImageMetadataReader.ReadMetadata(filename);
             foreach (var item in Directory)
             {
-                if (item.Name == "Photoshop")
+                if (item.Name == dir)
                 {
                     foreach (var a_item in item.Tags)
                     {
-                        if (a_item.TagName == "Version Info")
+                        if (a_item.TagName == tag)
                         {
                             return a_item.Description;
                         }
@@ -51,20 +51,55 @@ namespace PSD_CreationDate
         {
             var xmpDirectory            = ImageMetadataReader.ReadMetadata(filename).OfType<XmpDirectory>().FirstOrDefault();
 
+
+
             FileInfo fileInfo           = new FileInfo();
             fileInfo.FileName           = Path.GetFileName(filename);
 
-            string temp_ver = SearchMeta(filename, "Photoshop", "Version Info").Split(',')[1];
-            temp_ver = temp_ver.Remove(temp_ver.Length - 3);
-            temp_ver = temp_ver.Remove(0,1);
+            string temp_ver = SearchMeta(filename, "Photoshop", "Version Info");
+
+            if (temp_ver != "Unknown")
+            {
+                temp_ver = temp_ver.Split(',')[1];
+                temp_ver = temp_ver.Remove(temp_ver.Length - 3);
+                temp_ver = temp_ver.Remove(0, 1);
+            }
 
             fileInfo.PhotoshopVersion = temp_ver;
 
-            //fileInfo.PhotoshopVersion = xmpDirectory.XmpMeta.GetProperty("http://ns.adobe.com/xap/1.0/", "xmp:CreatorTool").Value;
+            if (xmpDirectory != null)
+            {
+                var a1 = DateTime.Parse(xmpDirectory.XmpMeta.GetProperty("http://ns.adobe.com/xap/1.0/", "xmp:CreateDate").Value);
+                fileInfo.CreationDate = a1.ToString("yyyy-MM-dd HH:mm:ss");
 
+                a1 = DateTime.Parse(xmpDirectory.XmpMeta.GetProperty("http://ns.adobe.com/xap/1.0/", "xmp:ModifyDate").Value);
+                fileInfo.ModifyDate = a1.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+            else
+            {
+                fileInfo.CreationDate = "Unknown";
 
-            fileInfo.CreationDate       = xmpDirectory.XmpMeta.GetProperty("http://ns.adobe.com/xap/1.0/",  "xmp:CreateDate"        ).Value;
-            fileInfo.ModifyDate         = xmpDirectory.XmpMeta.GetProperty("http://ns.adobe.com/xap/1.0/",  "xmp:ModifyDate"        ).Value;
+                string[] temp_date = SearchMeta(filename, "File", "File Modified Date").Split(' ');
+                var a1 = DateTime.Parse($"{temp_date[2]} {temp_date[1]} {temp_date[5]} {temp_date[3]}");
+                fileInfo.ModifyDate = a1.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+            //try
+            //{
+               
+            //}
+            //catch (Exception)
+            //{
+                
+            //}
+
+            //try
+            //{
+                
+            //}
+            //catch (Exception)
+            //{
+                
+            //}
             //fileInfo.Height             = xmpDirectory.XmpMeta.GetProperty("http://ns.adobe.com/exif/1.0/", "exif:PixelYDimension"  ).Value;
             //fileInfo.Widht              = xmpDirectory.XmpMeta.GetProperty("http://ns.adobe.com/exif/1.0/", "exif:PixelXDimension"  ).Value;
 
