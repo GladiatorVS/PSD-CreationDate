@@ -51,8 +51,6 @@ namespace PSD_CreationDate
         {
             var xmpDirectory            = ImageMetadataReader.ReadMetadata(filename).OfType<XmpDirectory>().FirstOrDefault();
 
-
-
             FileInfo fileInfo           = new FileInfo();
             fileInfo.FileName           = Path.GetFileName(filename);
 
@@ -83,23 +81,7 @@ namespace PSD_CreationDate
                 var a1 = DateTime.Parse($"{temp_date[2]} {temp_date[1]} {temp_date[5]} {temp_date[3]}");
                 fileInfo.ModifyDate = a1.ToString("yyyy-MM-dd HH:mm:ss");
             }
-            //try
-            //{
-               
-            //}
-            //catch (Exception)
-            //{
-                
-            //}
 
-            //try
-            //{
-                
-            //}
-            //catch (Exception)
-            //{
-                
-            //}
             //fileInfo.Height             = xmpDirectory.XmpMeta.GetProperty("http://ns.adobe.com/exif/1.0/", "exif:PixelYDimension"  ).Value;
             //fileInfo.Widht              = xmpDirectory.XmpMeta.GetProperty("http://ns.adobe.com/exif/1.0/", "exif:PixelXDimension"  ).Value;
 
